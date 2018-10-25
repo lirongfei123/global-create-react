@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const logger = require('../lib/logger');
+var commander = require('commander');
+commander.version('0.0.1');
+commander.option('-l, --local', '在线联调');
+commander.parse(process.argv);
+const crossSpawn = require('cross-spawn');
+crossSpawn.sync(
+    'node',
+    [path.join(__dirname, `../tools/start.js`)].concat(!commander.local ? ['--online'] : ['--local']),
+    {
+        stdio: 'inherit'
+    }
+);

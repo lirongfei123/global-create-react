@@ -1,0 +1,7 @@
+node_modules
+dist
+/build
+config.json
+diamond-cache
+.idea
+.DS_Store

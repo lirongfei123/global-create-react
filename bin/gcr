@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+const updater = require('npm-updater');
+const chalk = require('chalk');
+const semver = require('semver');
+const packageName = 'global-create-react';
+const tag = 'latest';
+let updateMessage = 
+`你可以执行 tnpm install -g ${packageName}@${tag} 来安装此版本
+如果提示没有权限，请尝试 sudo tnpm install -g ${packageName}@${tag}`;
+const pkg = require('../package.json');
+updater({
+    package: pkg,
+    abort: false,
+    interval: '1h',
+    tag,
+    updateMessage,
+}).then(function (info) {
+    if (semver.gt(info.version, info.current)) {
+        console.log(chalk.red(`当前最新版本为：${info.version}, 请尽快升级`));
+    }
+    var commander = require('commander');
+    commander.version('0.0.1')
+    .command('init', '初始化一个项目')
+    .command('update', '更新项目配置')
+    .command('start', '启动项目')
+    .command('build', '打包项目')
+    .command('clone', 'clone一个组件，传入组件名称');
+    commander.parse(process.argv);
+}).catch(err => {
+    console.error(err.stack);
+    process.exit(1);
+});

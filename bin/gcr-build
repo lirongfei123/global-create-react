@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const logger = require('../lib/logger');
+var commander = require('commander');
+commander.version('0.0.1');
+commander.parse(process.argv);
+const crossSpawn = require('cross-spawn');
+crossSpawn.sync(
+    'webpack',
+    ['--config', path.join(__dirname, `../tools/config/webpack.component.js`), '--release'],
+    {
+        stdio: 'inherit'
+    }
+);

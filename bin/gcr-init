@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const co = require('co');
+const logger = require('../lib/logger');
+const fs = require('fs');
+var commander = require('commander');
+const copy = require('ncp').ncp;
+copy.limit = 16;
+const log = console.log;
+const exist = fs.existsSync;
+commander.version('0.0.1');
+commander.parse(process.argv);
+const workPath = process.cwd();
+const rm = require('rimraf').sync;
+const inquirer = require('inquirer');
+// 项目名
+const projectName = commander.args[0];
+// 检查是否存在，不存在就创建
+const projectFolderPath = path.join(workPath, projectName);
+new Promise(function (resolve, reject) {
+    if (!exist(projectFolderPath)) {
+        fs.mkdirSync(projectFolderPath);
+        resolve();
+    } else {
+        inquirer.prompt({
+            type: 'confim',
+            name: 'isOverWrite',
+            message: '目录已经存在, 是否覆盖（y/n）'
+        }).then(function (result) {
+            if (result.isOverWrite === 'y') {
+                resolve();
+            } else  {
+                reject();
+            }
+        })
+    }
+}).then(function () {
+    copyFiles(projectFolderPath);
+}, function () {
+    logger.log('流程结束');
+});
+
+function copyFiles (projectFolderPath) {
+    logger.log('复制index.js文件');
+    if (!exist(`${projectFolderPath}/src`)) {
+        fs.mkdirSync(`${projectFolderPath}/src`);
+    }
+    copy(path.join(__dirname, '../src'), `${projectFolderPath}/src`, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console .log('src - done!');
+    });
+    copy(path.join(__dirname, '../template/template.html'), `${projectFolderPath}/template.html`, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console .log('template.html - done!');
+    });
+    copy(path.join(__dirname, '../template/config.js'), `${projectFolderPath}/config.js`, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console .log('config.js - done!');
+    });
+    var tempPackageJson = require(path.join(__dirname, '../template/package.json'));
+    tempPackageJson.name = projectName;
+    fs.writeFileSync(`${projectFolderPath}/package.json`, JSON.stringify(tempPackageJson, null, 4));
+    fs.writeFileSync(`${projectFolderPath}/.gitignore`, `
+node_modules
+dist
+    `);
+    
+}
