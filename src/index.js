@@ -1,11 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Router, Switch, Route, Redirect} from 'react-router';
-import createHistory from 'history/createBrowserHistory';
-import App from './App';
-import Com from './Com';
-const history = createHistory();
-import { Provider } from './createStore';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Router, Switch, Route, Redirect } from 'react-router'
+import createHistory from 'history/createBrowserHistory'
+import App from './App'
+import { Provider } from './createStore'
+const history = createHistory()
 ReactDOM.render(
     <Provider>
         <Router history={history}>
@@ -15,4 +14,4 @@ ReactDOM.render(
             </Switch>
         </Router>
     </Provider>,
-document.getElementById('app'));
+    document.getElementById('app'))

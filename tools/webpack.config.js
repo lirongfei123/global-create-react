@@ -1,6 +1,9 @@
 const path = require('path');
 const utils = require('./utils');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const innerCSS = new ExtractTextPlugin('inner.css');
+const outerCss = new ExtractTextPlugin('outer.css');
 const fs = require('fs');
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
@@ -60,46 +63,48 @@ const webpackBase = {
                             ]
                         }
                     },
-                    // {
-                    //     loader: utils.resolveLoader("eslint-loader"),
-                    //     options: {
-                    //     }
-                    // }
+                    {
+                        exclude: [nodeDir],
+                        enforce: 'pre',
+                        loader: utils.resolveLoader("eslint-loader"),
+                    }
                 ] 
             },
             {
                 test: /\.(css|less|sass|scss)$/,
                 rules: [
-                    // 将react的css转成作用域内生效
-                    {
-                        issuer: {
-                            not: [/\.(css|sass|less|scss)$/],
-                        },
-                        exclude: [nodeDir],
-                        loader: utils.resolveLoader('style-loader'),
-                        options: {
-                            sourceMap: true,
-                        }
-                    },
-                    // css-loader 存放在node_modules里面的
                     {
                         include: [nodeDir],
-                        loader: utils.resolveLoader('css-loader'),
-                        options: {
-                            sourceMap: __debug,
-                            modules: false,
-                            minimize: __debug ? false : true
-                        }
+                        use: outerCss.extract({
+                            fallback: utils.resolveLoader('style-loader'),
+                            use: [
+                                {
+                                    loader: utils.resolveLoader('css-loader'),
+                                    options: {
+                                        sourceMap: __debug,
+                                        modules: false,
+                                        minimize: __debug ? false : true
+                                    }
+                                }
+                            ]
+                        })
                     },
                     {
                         exclude: [nodeDir],
-                        loader: utils.resolveLoader('css-loader'),
-                        options: {
-                            sourceMap: __debug,
-                            minimize: __debug ? false : true,
-                            modules: true,
-                            localIdentName: __debug ? '[name]-[local-]-[hash:base64:5]' : '[hash:base64:5]'
-                        }
+                        use: innerCSS.extract({
+                          fallback: utils.resolveLoader('style-loader'),
+                          use: [
+                                {
+                                    loader: utils.resolveLoader('css-loader'),
+                                    options: {
+                                        sourceMap: __debug,
+                                        minimize: __debug ? false : true,
+                                        modules: true,
+                                        localIdentName: __debug ? '[name]-[local-]-[hash:base64:5]' : '[hash:base64:5]'
+                                    }
+                                }
+                            ]
+                        })
                     },
                     {
                         exclude: [nodeDir],
@@ -152,6 +157,8 @@ const webpackBase = {
         ]
     },
     plugins: [
+        innerCSS,
+        outerCss,
         new webpack.DefinePlugin({
             ENV: __debug,
         }),

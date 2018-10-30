@@ -64,6 +64,12 @@ function copyFiles (projectFolderPath) {
         }
         console .log('config.js - done!');
     });
+    copy(path.join(__dirname, '../template/.eslintrc'), `${projectFolderPath}/.eslintrc`, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console .log('.eslintrc - done!');
+    });
     var tempPackageJson = require(path.join(__dirname, '../template/package.json'));
     tempPackageJson.name = projectName;
     fs.writeFileSync(`${projectFolderPath}/package.json`, JSON.stringify(tempPackageJson, null, 4));

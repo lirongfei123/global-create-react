@@ -1,7 +1,7 @@
 {
   "name": "global-create-react",
-  "version": "1.0.0",
-  "description": "此文件可以修改, 升级过程中的依赖可能会被修改",
+  "version": "1.0.2",
+  "description": "快速创建完整的react项目",
   "main": "index.js",
   "bin": {
     "gcr": "bin/gcr",
@@ -9,14 +9,10 @@
     "gcr-start": "bin/gcr-start",
     "gcr-build": "bin/gcr-build"
   },
-  "scripts": {
-    "dev": "node tools/shell/start.js",
-    "build": "webpack --config tools/config/webpack.component.js --release"
-  },
   "author": "李荣平 <rongping.lrp@gamil.com> (https://github.com/lirongfei123)",
-  "homepage": "https://github.com/lirongfei123/global-react-create",
-  "repository": "git@github.com:lirongfei123/global-react-create.git",
-  "bugs": "https://github.com/lirongfei123/global-react-create/issues",
+  "homepage": "https://github.com/lirongfei123/global-create-react",
+  "repository": "git@github.com:lirongfei123/global-create-react.git",
+  "bugs": "https://github.com/lirongfei123/global-create-react/issues",
   "dependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
@@ -35,6 +31,16 @@
     "copyfiles": "^2.0.0",
     "cross-spawn": "^6.0.5",
     "css-loader": "^1.0.0",
+    "eslint": "^5.8.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^2.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
