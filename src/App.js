@@ -10,8 +10,9 @@ class App extends Component {
         this.props.dispatch('state2/reduce')
     }
     render () {
+        const { classes } = this.props
         return (
-            <div className="App">
+            <div className={classes.app}>
                 <button onClick={this.add.bind(this)}>增加state1</button>
                 <button onClick={this.add.bind(this)}>增加state1</button>
                 <div>state1的值：{this.props.state1.count}</div>
@@ -25,5 +26,9 @@ export default connect((state) => {
     return {
         state1: state.state1,
         state2: state.state2
+    }
+}, {
+    app: {
+        fontSize: '14px'
     }
 })(App)
